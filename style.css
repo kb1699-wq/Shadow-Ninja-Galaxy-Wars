@@ -207,3 +207,30 @@ button:hover {
   width: 100%;
   background: #4cff8a;
 }
+
+/* World progression */
+
+#world-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 12px 0;
+  color: #63eaff;
+  font-weight: bold;
+}
+
+#next-world-button {
+  margin: 15px auto;
+  background: #087d83;
+  border-color: #63ffff;
+  box-shadow: 0 0 15px #27dfff;
+}
+
+#next-world-button:hover {
+  background: #079eaa;
+}
+
+#world-title {
+  text-shadow: 0 0 12px #27dfff;
+}
