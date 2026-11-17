@@ -133,6 +133,7 @@ function loadWorld() {
   clearEnemies();
 
   currentWorld = Math.min(currentWorld, 9);
+  gameArea.className = "world-" + currentWorld;
   worldComplete = false;
 
   ninja.x = 70;
