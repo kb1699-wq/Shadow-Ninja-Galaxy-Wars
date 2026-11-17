@@ -130,3 +130,44 @@ button:hover {
 [hidden] {
   display: none !important;
 }
+
+/* Shadow Ninja combat effects */
+
+#effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.energy-blast {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #54f5ff;
+  border: 3px solid white;
+  box-shadow: 0 0 15px #54f5ff;
+}
+
+.sword-effect {
+  position: absolute;
+  width: 55px;
+  height: 8px;
+  background: #c49aff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #a45cff;
+}
+
+#player.attacking {
+  filter: brightness(2);
+}
+
+#player.dashing {
+  box-shadow: 0 0 25px #27dfff;
+  filter: brightness(1.8);
+}
+
+#player.blasting {
+  filter: drop-shadow(0 0 12px #54f5ff);
+}
