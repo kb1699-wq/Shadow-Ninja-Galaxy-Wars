@@ -69,7 +69,8 @@ function updateStats() {
   livesDisplay.textContent = "Lives: " + lives;
   coinsDisplay.textContent = "Coins: " + coins;
   xpDisplay.textContent = "XP: " + xp;
-saveGame(); }
+  saveGame();
+}
 
 function updateWorldInfo() {
   worldTitle.textContent =
@@ -150,19 +151,7 @@ function loadWorld() {
   createEnemy(Math.max(400, areaWidth * 0.75));
 
   updateWorldInfo();
-  updateStats();
-}
-
-function completeWorld() {
-  if (worldComplete) return;
-
-  worldComplete = true;
-  unlockedWorlds = Math.max(unlockedWorlds, currentWorld + 2);
-
-  coins += 25;
-  xp += 50;
-
-  updateStats();// Save player progress
+  updateStats(); // Save player progress
 function saveGame() {
   const saveData = {
     currentWorld: currentWorld,
@@ -199,6 +188,18 @@ function loadGame() {
 }
 
 loadGame();
+}
+
+function completeWorld() {
+  if (worldComplete) return;
+
+  worldComplete = true;
+  unlockedWorlds = Math.max(unlockedWorlds, currentWorld + 2);
+
+  coins += 25;
+  xp += 50;
+
+  updateStats();
   updateWorldInfo();
 
   if (currentWorld === 9) {
