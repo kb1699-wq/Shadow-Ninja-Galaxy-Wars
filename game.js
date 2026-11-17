@@ -69,7 +69,7 @@ function updateStats() {
   livesDisplay.textContent = "Lives: " + lives;
   coinsDisplay.textContent = "Coins: " + coins;
   xpDisplay.textContent = "XP: " + xp;
-}
+saveGame(); }
 
 function updateWorldInfo() {
   worldTitle.textContent =
