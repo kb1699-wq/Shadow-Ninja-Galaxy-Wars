@@ -294,3 +294,30 @@ button:hover {
     radial-gradient(circle at 50% 20%, #ffffff 0 3px, transparent 6px),
     linear-gradient(#24105a, #071b36);
 }
+/* Ninja Upgrade Shop */
+
+#shop {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 500px;
+  background: #101a35;
+  border: 2px solid #54f5ff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #267bff;
+  text-align: center;
+}
+
+#shop h3 {
+  color: #54f5ff;
+}
+
+#shop button {
+  display: block;
+  width: 100%;
+  margin: 10px auto;
+  padding: 12px;
+}
+
+#shop-message {
+  color: #aaffcc;
+}
