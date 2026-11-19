@@ -8,16 +8,37 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <header>
     <h1>SHADOW NINJA: GALAXY WARS</h1>
     <p>Defend the galaxy. Become the legend.</p>
   </header>
 
+  <section id="status-bar">
+    <span id="health">Health: 100</span>
+    <span id="lives">Lives: 3</span>
+    <span id="coins">Coins: 0</span>
+    <span id="xp">XP: 0</span>
+  </section>
+
   <main>
     <section id="game-screen">
-      <h2>Welcome, Shadow Ninja!</h2>
-      <p>Your adventure through 10 worlds begins here.</p>
-      <button id="start-button">START GAME</button>
+      <div id="start-screen">
+        <h2>WELCOME, SHADOW NINJA!</h2>
+        <p>Your mission is to save the galaxy across 10 worlds.</p>
+        <button id="start-button">START GAME</button>
+      </div>
+
+      <div id="world-screen" hidden>
+        <h2 id="world-title">WORLD 1: NEON CITY</h2>
+
+        <div id="game-area">
+          <div id="platform"></div>
+          <div id="player">忍</div>
+        </div>
+
+        <p id="message">Use A and D to move. Press SPACE to jump.</p>
+      </div>
     </section>
   </main>
 
