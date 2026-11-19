@@ -410,7 +410,6 @@ function updatePlayer() {
   requestAnimationFrame(updatePlayer);
 }
 
-updateStats(); // Save player progress
 function saveGame() {
   const saveData = {
     currentWorld: currentWorld,
@@ -429,11 +428,6 @@ function saveGame() {
   } catch (error) {
     console.log("SAVE FAILED:", error);
   }
-}
-  
-
-  localStorage.setItem("shadowNinjaSave", JSON.stringify(saveData));
-  console.log("GAME SAVED!");
 }
 
 // Load saved player progress
