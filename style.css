@@ -171,3 +171,39 @@ button:hover {
 #player.blasting {
   filter: drop-shadow(0 0 12px #54f5ff);
 }
+
+/* Robot soldiers */
+
+#enemy-area {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.robot-enemy {
+  position: absolute;
+  bottom: 35px;
+  width: 42px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  background: #152d49;
+  border: 2px solid #36eaff;
+  box-shadow: 0 0 14px #36eaff;
+}
+
+.robot-health {
+  position: absolute;
+  bottom: 54px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #ff4242;
+}
+
+.robot-health-fill {
+  height: 100%;
+  width: 100%;
+  background: #4cff8a;
+}
