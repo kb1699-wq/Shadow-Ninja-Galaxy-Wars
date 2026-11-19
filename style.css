@@ -234,3 +234,63 @@ button:hover {
 #world-title {
   text-shadow: 0 0 12px #27dfff;
 }
+
+/* Unique world environments */
+
+#game-area.world-0 {
+  background:
+    radial-gradient(circle at 20% 25%, #52258b 0 2px, transparent 3px),
+    linear-gradient(#100b32, #071b36);
+}
+
+#game-area.world-1 {
+  background:
+    radial-gradient(circle at 30% 30%, #8cff72 0 5px, transparent 7px),
+    linear-gradient(#082b28, #064b35);
+}
+
+#game-area.world-2 {
+  background:
+    radial-gradient(circle at 70% 25%, #49eaff 0 3px, transparent 5px),
+    linear-gradient(#07152f, #162c55);
+}
+
+#game-area.world-3 {
+  background:
+    radial-gradient(ellipse at 50% 100%, #ff5a00, transparent 45%),
+    linear-gradient(#35102d, #14051c);
+}
+
+#game-area.world-4 {
+  background:
+    radial-gradient(circle at 20% 20%, white 0 2px, transparent 4px),
+    linear-gradient(#152b50, #07152f);
+}
+
+#game-area.world-5 {
+  background:
+    linear-gradient(120deg, #c68c40, #5d351c, #24152b);
+}
+
+#game-area.world-6 {
+  background:
+    linear-gradient(#101b3d, #163e50, #071b36);
+}
+
+#game-area.world-7 {
+  background:
+    radial-gradient(circle at 70% 30%, #762cff 0 4px, transparent 7px),
+    linear-gradient(#08051c, #260b42);
+}
+
+#game-area.world-8 {
+  background:
+    radial-gradient(circle at 40% 30%, #6affff 0 5px, transparent 8px),
+    linear-gradient(#10234a, #36205b);
+}
+
+#game-area.world-9 {
+  background:
+    radial-gradient(circle at 50% 20%, #ffffff 0 3px, transparent 6px),
+    linear-gradient(#24105a, #071b36);
+}
