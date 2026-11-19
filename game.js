@@ -426,12 +426,11 @@ function saveGame() {
       "shadowNinjaSave",
       JSON.stringify(saveData)
     );
-
-    console.log("GAME SAVED!");
   } catch (error) {
     console.log("SAVE FAILED:", error);
   }
 }
+  
 
   localStorage.setItem("shadowNinjaSave", JSON.stringify(saveData));
   console.log("GAME SAVED!");
