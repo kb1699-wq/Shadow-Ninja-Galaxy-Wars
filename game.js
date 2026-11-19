@@ -133,6 +133,7 @@ function loadWorld() {
   clearEnemies();
 
   currentWorld = Math.min(currentWorld, 9);
+  gameArea.className = "world-" + currentWorld;
   worldComplete = false;
 
   ninja.x = 70;
@@ -408,4 +409,40 @@ function updatePlayer() {
   requestAnimationFrame(updatePlayer);
 }
 
-updateStats();
+updateStats(); // Save player progress
+function saveGame() {
+  const saveData = {
+    currentWorld: currentWorld,
+    unlockedWorlds: unlockedWorlds,
+    coins: coins,
+    xp: xp,
+    health: health,
+    lives: lives
+  };
+
+  localStorage.setItem("shadowNinjaSave", JSON.stringify(saveData));
+}
+
+// Load saved player progress
+function loadGame() {
+  const savedData = localStorage.getItem("shadowNinjaSave");
+
+  if (!savedData) return;
+
+  try {
+    const data = JSON.parse(savedData);
+
+    currentWorld = Math.max(0, Math.min(9, data.currentWorld || 0));
+    unlockedWorlds = Math.max(1, Math.min(10, data.unlockedWorlds || 1));
+    coins = Math.max(0, data.coins || 0);
+    xp = Math.max(0, data.xp || 0);
+    health = Math.max(0, Math.min(100, data.health ?? 100));
+    lives = Math.max(0, Math.min(3, data.lives ?? 3));
+
+    updateStats();
+  } catch (error) {
+    console.log("Could not load saved game.");
+  }
+}
+
+loadGame();
