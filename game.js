@@ -12,12 +12,35 @@ const livesDisplay = document.getElementById("lives");
 const coinsDisplay = document.getElementById("coins");
 const xpDisplay = document.getElementById("xp");
 
+const worldTitle = document.getElementById("world-title");
+const worldNumber = document.getElementById("world-number");
+const worldStatus = document.getElementById("world-status");
+const nextWorldButton = document.getElementById("next-world-button");
+
+const worlds = [
+  "Neon City",
+  "Alien Jungle",
+  "Space Station",
+  "Volcanic Planet",
+  "Frozen Moon",
+  "Desert Planet",
+  "Cyber Factory",
+  "Shadow Dimension",
+  "Crystal World",
+  "Final Galaxy"
+];
+
+let currentWorld = 0;
+let unlockedWorlds = 1;
 let gameStarted = false;
+let worldComplete = false;
+
 let facing = 1;
 let lastDash = 0;
 let lastSword = 0;
 let lastBlast = 0;
 let lastDamage = 0;
+
 let coins = 0;
 let xp = 0;
 let health = 100;
@@ -48,6 +71,39 @@ function updateStats() {
   xpDisplay.textContent = "XP: " + xp;
 }
 
+function updateWorldInfo() {
+  worldTitle.textContent =
+    "WORLD " + (currentWorld + 1) + ": " + worlds[currentWorld];
+
+  worldNumber.textContent =
+    "World " + (currentWorld + 1) + " of 10";
+
+  worldStatus.textContent = worldComplete
+    ? "Mission completed!"
+    : "Mission in progress";
+
+  nextWorldButton.hidden =
+    !worldComplete || currentWorld === 9;
+
+  if (currentWorld === 9 && worldComplete) {
+    worldStatus.textContent = "GALAXY SAVED!";
+  }
+}
+
+function clearEnemies() {
+  enemies.forEach(function(enemy) {
+    enemy.element.remove();
+  });
+
+  enemies.length = 0;
+
+  projectiles.forEach(function(shot) {
+    shot.element.remove();
+  });
+
+  projectiles.length = 0;
+}
+
 function createEnemy(x) {
   const element = document.createElement("div");
   element.className = "robot-enemy";
@@ -73,18 +129,66 @@ function createEnemy(x) {
   });
 }
 
+function loadWorld() {
+  clearEnemies();
+
+  currentWorld = Math.min(currentWorld, 9);
+  worldComplete = false;
+
+  ninja.x = 70;
+  ninja.y = 0;
+  ninja.velocityY = 0;
+  ninja.jumps = 0;
+
+  player.style.left = ninja.x + "px";
+  player.style.bottom = groundHeight + "px";
+
+  const areaWidth = gameArea.clientWidth;
+
+  createEnemy(Math.max(250, areaWidth * 0.45));
+  createEnemy(Math.max(400, areaWidth * 0.75));
+
+  updateWorldInfo();
+  updateStats();
+}
+
+function completeWorld() {
+  if (worldComplete) return;
+
+  worldComplete = true;
+  unlockedWorlds = Math.max(unlockedWorlds, currentWorld + 2);
+
+  coins += 25;
+  xp += 50;
+
+  updateStats();
+  updateWorldInfo();
+
+  if (currentWorld === 9) {
+    worldStatus.textContent = "GALAXY SAVED! YOU WIN!";
+    alert("Congratulations! You saved the galaxy!");
+  } else {
+    alert("World completed! You earned 25 coins and 50 XP.");
+  }
+}
+
 function startGame() {
   startScreen.hidden = true;
   worldScreen.hidden = false;
   gameStarted = true;
 
-  createEnemy(350);
-  createEnemy(650);
-
-  updatePlayer();
+  loadWorld();
+  requestAnimationFrame(updatePlayer);
 }
 
 startButton.addEventListener("click", startGame);
+
+nextWorldButton.addEventListener("click", function() {
+  if (!worldComplete || currentWorld >= 9) return;
+
+  currentWorld++;
+  loadWorld();
+});
 
 document.addEventListener("keydown", function(event) {
   if (["Space", "ArrowLeft", "ArrowRight"].includes(event.code)) {
@@ -94,7 +198,7 @@ document.addEventListener("keydown", function(event) {
   if (keys[event.code]) return;
   keys[event.code] = true;
 
-  if (!gameStarted) return;
+  if (!gameStarted || worldComplete) return;
 
   if (event.code === "Space" && ninja.jumps < 2) {
     ninja.velocityY = jumpPower;
@@ -117,6 +221,8 @@ document.addEventListener("keyup", function(event) {
 });
 
 function damageEnemy(enemy, amount) {
+  if (!enemies.includes(enemy)) return;
+
   enemy.health -= amount;
 
   enemy.healthFill.style.width =
@@ -130,11 +236,9 @@ function damageEnemy(enemy, amount) {
     xp += 20;
     updateStats();
 
-    setTimeout(function() {
-      if (gameStarted) {
-        createEnemy(300 + Math.random() * 400);
-      }
-    }, 3000);
+    if (enemies.length === 0) {
+      completeWorld();
+    }
   }
 }
 
@@ -146,8 +250,10 @@ function swordAttack() {
 
   const slash = document.createElement("div");
   slash.className = "sword-effect";
+
   slash.style.left =
     (ninja.x + (facing === 1 ? 35 : -48)) + "px";
+
   slash.style.bottom =
     (groundHeight + ninja.y + 25) + "px";
 
@@ -158,7 +264,7 @@ function swordAttack() {
 
     if (
       Math.abs(distance) < 90 &&
-      (distance * facing) >= -25
+      distance * facing >= -25
     ) {
       damageEnemy(enemy, 50);
     }
@@ -207,93 +313,97 @@ function dash() {
 function updatePlayer() {
   if (!gameStarted) return;
 
-  const areaWidth = gameArea.clientWidth;
+  if (!worldComplete) {
+    const areaWidth = gameArea.clientWidth;
 
-  if (keys["KeyA"] || keys["ArrowLeft"]) {
-    ninja.x -= ninja.speed;
-    facing = -1;
-  }
-
-  if (keys["KeyD"] || keys["ArrowRight"]) {
-    ninja.x += ninja.speed;
-    facing = 1;
-  }
-
-  ninja.x = Math.max(
-    0,
-    Math.min(areaWidth - ninja.width, ninja.x)
-  );
-
-  ninja.velocityY -= gravity;
-  ninja.y += ninja.velocityY;
-
-  if (ninja.y <= 0) {
-    ninja.y = 0;
-    ninja.velocityY = 0;
-    ninja.jumps = 0;
-  }
-
-  player.style.left = ninja.x + "px";
-  player.style.bottom = (groundHeight + ninja.y) + "px";
-
-  enemies.forEach(function(enemy) {
-    enemy.x += enemy.direction * 0.6;
-
-    if (enemy.x < 150 || enemy.x > areaWidth - 60) {
-      enemy.direction *= -1;
+    if (keys["KeyA"] || keys["ArrowLeft"]) {
+      ninja.x -= ninja.speed;
+      facing = -1;
     }
 
-    enemy.element.style.left = enemy.x + "px";
+    if (keys["KeyD"] || keys["ArrowRight"]) {
+      ninja.x += ninja.speed;
+      facing = 1;
+    }
 
-    if (
-      Math.abs(enemy.x - ninja.x) < 40 &&
-      ninja.y < 45 &&
-      Date.now() - lastDamage > 1000
-    ) {
-      health -= 10;
-      lastDamage = Date.now();
+    ninja.x = Math.max(
+      0,
+      Math.min(areaWidth - ninja.width, ninja.x)
+    );
 
-      if (health <= 0) {
-        lives--;
+    ninja.velocityY -= gravity;
+    ninja.y += ninja.velocityY;
 
-        if (lives > 0) {
-          health = 100;
-          ninja.x = 70;
-          ninja.y = 0;
-        } else {
-          health = 0;
-          gameStarted = false;
-          alert("GAME OVER! Refresh to try again.");
-        }
+    if (ninja.y <= 0) {
+      ninja.y = 0;
+      ninja.velocityY = 0;
+      ninja.jumps = 0;
+    }
+
+    player.style.left = ninja.x + "px";
+    player.style.bottom =
+      (groundHeight + ninja.y) + "px";
+
+    enemies.forEach(function(enemy) {
+      enemy.x += enemy.direction * 0.6;
+
+      if (enemy.x < 150 || enemy.x > areaWidth - 60) {
+        enemy.direction *= -1;
       }
 
-      updateStats();
-    }
-  });
+      enemy.element.style.left = enemy.x + "px";
 
-  projectiles.slice().forEach(function(shot) {
-    shot.x += shot.direction * 7;
-
-    shot.element.style.left = shot.x + "px";
-    shot.element.style.bottom =
-      (groundHeight + shot.y) + "px";
-
-    enemies.slice().forEach(function(enemy) {
       if (
-        Math.abs(shot.x - enemy.x) < 35 &&
-        Math.abs(shot.y - ninja.y) < 55
+        Math.abs(enemy.x - ninja.x) < 40 &&
+        ninja.y < 45 &&
+        Date.now() - lastDamage > 1000
       ) {
-        damageEnemy(enemy, 100);
+        health -= 10;
+        lastDamage = Date.now();
+
+        if (health <= 0) {
+          lives--;
+
+          if (lives > 0) {
+            health = 100;
+            ninja.x = 70;
+            ninja.y = 0;
+            ninja.velocityY = 0;
+          } else {
+            health = 0;
+            gameStarted = false;
+            alert("GAME OVER! Refresh to try again.");
+          }
+        }
+
+        updateStats();
+      }
+    });
+
+    projectiles.slice().forEach(function(shot) {
+      shot.x += shot.direction * 7;
+
+      shot.element.style.left = shot.x + "px";
+      shot.element.style.bottom =
+        (groundHeight + shot.y) + "px";
+
+      enemies.slice().forEach(function(enemy) {
+        if (
+          Math.abs(shot.x - enemy.x) < 35 &&
+          Math.abs(shot.y - ninja.y) < 55
+        ) {
+          damageEnemy(enemy, 100);
+          shot.element.remove();
+          projectiles.splice(projectiles.indexOf(shot), 1);
+        }
+      });
+
+      if (shot.x < -30 || shot.x > areaWidth + 30) {
         shot.element.remove();
         projectiles.splice(projectiles.indexOf(shot), 1);
       }
     });
-
-    if (shot.x < -30 || shot.x > areaWidth + 30) {
-      shot.element.remove();
-      projectiles.splice(projectiles.indexOf(shot), 1);
-    }
-  });
+  }
 
   requestAnimationFrame(updatePlayer);
 }
