@@ -422,6 +422,7 @@ function saveGame() {
   };
 
   localStorage.setItem("shadowNinjaSave", JSON.stringify(saveData));
+  console.log("GAME SAVED!");
 }
 
 // Load saved player progress
